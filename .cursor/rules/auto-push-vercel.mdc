@@ -1,0 +1,14 @@
+---
+description: Tras cada cambio, commit y push a GitHub para deploy en Vercel
+alwaysApply: true
+---
+
+# Auto push para Vercel
+
+Después de cualquier cambio en el código de este proyecto:
+
+1. Hacé commit de los cambios relevantes (mensaje claro en español o inglés breve).
+2. Hacé `git push` a `origin` (`main`) sin esperar que el usuario lo pida.
+3. El deploy a Vercel se dispara desde el push a GitHub; no hace falta un comando aparte a Vercel salvo que el usuario lo pida.
+
+No hace falta preguntar permiso para commit/push en este repo. Sí evitar incluir secretos (`.env`, credenciales).
