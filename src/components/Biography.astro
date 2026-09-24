@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import bioImage from '../assets/images/bio-clase.jpg';
+import vehicleImage from '../assets/images/praga-vehiculo.jpg';
+import { bio } from '../data/content';
+---
+
+<section class="bio section" id="sobre-mi" aria-labelledby="bio-title">
+  <div class="container bio__grid">
+    <div class="bio__collage" aria-hidden="false">
+      <div class="bio__circle">
+        <Image
+          src={bioImage}
+          alt="Clase de manejo en un vehículo de Praga Escuela de Conductores"
+          widths={[360, 560, 800]}
+          sizes="(max-width: 900px) 70vw, 28vw"
+          loading="lazy"
+          class="bio__circle-img"
+        />
+      </div>
+      <div class="bio__square">
+        <Image
+          src={vehicleImage}
+          alt="Vehículo de Praga Escuela de Conductores"
+          widths={[280, 420, 640]}
+          sizes="(max-width: 900px) 45vw, 18vw"
+          loading="lazy"
+          class="bio__square-img"
+        />
+      </div>
+      <div class="bio__accent" aria-hidden="true"></div>
+    </div>
+
+    <div class="bio__copy">
+      <p class="eyebrow">Sobre mí</p>
+      <h2 id="bio-title" class="section-title">{bio.title}</h2>
+      {
+        bio.paragraphs.map((paragraph) => (
+          <p class="bio__text">{paragraph}</p>
+        ))
+      }
+      <ul class="bio__features" aria-label="Prioridades de enseñanza">
+        {
+          bio.priorities.map((item) => (
+            <li>
+              <span class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bio__grid {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .bio__collage {
+    position: relative;
+    min-height: 22rem;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+
+  .bio__circle {
+    width: min(78%, 22rem);
+    aspect-ratio: 1;
+    margin-inline: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: var(--shadow-lift);
+    border: 8px solid #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bio__circle-img,
+  .bio__square-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .bio__circle-img {
+    object-position: center 28%;
+  }
+
+  .bio__square {
+    position: absolute;
+    right: 0;
+    bottom: 0.5rem;
+    width: 42%;
+    aspect-ratio: 1;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    border: 6px solid #fff;
+    z-index: 2;
+  }
+
+  .bio__square-img {
+    object-position: center 42%;
+  }
+
+  .bio__accent {
+    position: absolute;
+    left: 8%;
+    bottom: 12%;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--color-green);
+    opacity: 0.9;
+    z-index: 0;
+  }
+
+  .bio__text {
+    margin: 0 0 1rem;
+    max-width: 36rem;
+    color: var(--color-muted);
+    font-size: 1.08rem;
+  }
+
+  .bio__features {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .bio__features li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 900px) {
+    .bio__grid {
+      grid-template-columns: 1fr 1.05fr;
+      gap: 4.5rem;
+    }
+
+    .bio__collage {
+      margin-inline: 0;
+      min-height: 28rem;
+      max-width: none;
+    }
+
+    .bio__features {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

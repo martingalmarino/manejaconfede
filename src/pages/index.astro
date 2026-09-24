@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Biography from '../components/Biography.astro';
+import Courses from '../components/Courses.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Instagram from '../components/Instagram.astro';
+import YouTube from '../components/YouTube.astro';
+import Brands from '../components/Brands.astro';
+import Footer from '../components/Footer.astro';
+import MobileCta from '../components/MobileCta.astro';
+---
+
+<BaseLayout>
+  <Header />
+  <main id="contenido-principal">
+    <Hero />
+    <Biography />
+    <Courses />
+    <CtaBanner />
+    <Instagram />
+    <YouTube />
+    <Brands />
+  </main>
+  <Footer />
+  <MobileCta />
+</BaseLayout>
+
+<script>
+  import { trackEvent, type AnalyticsEventName } from '../scripts/analytics';
+
+  const eventMap: Record<string, AnalyticsEventName> = {
+    course_cta: 'course_cta',
+    collaboration_cta: 'collaboration_cta',
+    instagram_click: 'instagram_click',
+    youtube_channel_click: 'youtube_channel_click',
+    video_activation: 'video_activation',
+  };
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const el = target.closest('[data-track]');
+    if (!(el instanceof HTMLElement)) return;
+
+    const raw = el.dataset.track || '';
+    const name = eventMap[raw];
+    if (!name) return;
+
+    trackEvent(name, {
+      section: el.dataset.section,
+      courseId: el.dataset.courseId,
+      label: raw,
+    });
+  });
+</script>

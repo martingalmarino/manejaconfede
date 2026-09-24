@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Manejá con Fede">
+  <rect width="64" height="64" rx="12" fill="#10764D"/>
+  <path d="M14 40c4-10 10-16 18-16s14 6 18 16" fill="none" stroke="#F7F8F5" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="22" cy="42" r="4" fill="#F7F8F5"/>
+  <circle cx="42" cy="42" r="4" fill="#F7F8F5"/>
+  <rect x="20" y="28" width="24" height="8" rx="2" fill="#303E70"/>
+</svg>

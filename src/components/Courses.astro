@@ -1,0 +1,357 @@
+---
+import { Image } from 'astro:assets';
+import logoPraga from '../assets/images/logo-praga.jpg';
+import vehicleImage from '../assets/images/praga-vehiculo.jpg';
+import {
+  courses,
+  coursesIntro,
+  reinforcement,
+  schedules,
+  trustItems,
+} from '../data/courses';
+import {
+  contacts,
+  isValidWhatsApp,
+  buildWhatsAppUrl,
+  courseInquiryMessage,
+} from '../data/contacts';
+import { social } from '../data/social';
+
+const whatsappReady = isValidWhatsApp(contacts.whatsappNumber);
+
+function courseHref(inquiryLabel: string): string {
+  if (whatsappReady && contacts.whatsappNumber) {
+    return buildWhatsAppUrl(
+      contacts.whatsappNumber,
+      courseInquiryMessage(inquiryLabel),
+    );
+  }
+  return social.pragaInstagram;
+}
+
+const helperText = whatsappReady
+  ? 'Te abrimos una conversación por WhatsApp con el curso seleccionado.'
+  : `Consultá por Instagram de Praga (${social.pragaInstagramHandle}).`;
+
+const trustIcons = [
+  'M4 17h16M6 17V9l6-4 6 4v8M9 17v-4h6v4',
+  'M12 3v18M7 8h10M7 12h10M7 16h6',
+  'M12 3l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V7l8-4z',
+  'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+];
+---
+
+<section class="courses section section--soft" id="cursos" aria-labelledby="cursos-title">
+  <div class="container">
+    <div class="courses__intro">
+      <p class="eyebrow">{coursesIntro.eyebrow}</p>
+      <h2 id="cursos-title" class="section-title section-title--center">{coursesIntro.title}</h2>
+      <p class="section-lead section-lead--center">{coursesIntro.body}</p>
+    </div>
+
+    <div class="courses__brand">
+      <div class="logo-frame">
+        <Image
+          src={logoPraga}
+          alt="Logo de Praga Escuela de Conductores"
+          widths={[240, 360, 480]}
+          sizes="220px"
+          loading="lazy"
+          class="logo-frame__img"
+        />
+      </div>
+      <figure class="vehicle-circle">
+        <Image
+          src={vehicleImage}
+          alt="Vehículo de Praga Escuela de Conductores con cartel de autoescuela"
+          widths={[400, 640, 900]}
+          sizes="(max-width: 768px) 70vw, 280px"
+          loading="lazy"
+          class="vehicle-circle__img"
+        />
+      </figure>
+    </div>
+
+    <div class="course-grid">
+      {
+        courses.map((course) => (
+          <article class="course-card" id={`curso-${course.id}`}>
+            <div class="course-card__top">
+              <p class="course-card__subtitle">{course.subtitle}</p>
+              <h3 class="course-card__title">{course.title}</h3>
+            </div>
+            <p class="course-card__desc">{course.description}</p>
+            <ul class="course-card__list">
+              {course.inclusions.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            <a
+              class="btn btn--primary"
+              href={courseHref(course.inquiryLabel)}
+              data-track="course_cta"
+              data-course-id={course.id}
+              data-section="cursos"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {whatsappReady ? course.ctaLabel : `${course.ctaLabel} por Instagram`}
+            </a>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="reinforcement">
+      <div>
+        <h3 class="reinforcement__title">{reinforcement.title}</h3>
+        <p>{reinforcement.body}</p>
+      </div>
+      <a
+        class="btn btn--secondary"
+        href={courseHref(reinforcement.inquiryLabel)}
+        data-track="course_cta"
+        data-course-id="refuerzo"
+        data-section="cursos"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {whatsappReady ? reinforcement.ctaLabel : 'Consultar refuerzos por Instagram'}
+      </a>
+    </div>
+
+    <p class="courses__helper">{helperText}</p>
+
+    <ul class="trust" aria-label="Características de la escuela">
+      {
+        trustItems.map((item, index) => (
+          <li>
+            <span class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d={trustIcons[index]} stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span>{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="schedules">
+      {
+        schedules.map((block) => (
+          <div class="schedule-block">
+            <h3>{block.title}</h3>
+            {block.lines.map((line) => (
+              <p>{line}</p>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+    <p class="availability">{coursesIntro.availabilityNote}</p>
+  </div>
+</section>
+
+<style>
+  .courses__intro {
+    margin-bottom: 2.75rem;
+  }
+
+  .courses__brand {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2.75rem;
+  }
+
+  .logo-frame {
+    width: min(100%, 15rem);
+    padding: 1.1rem 1.2rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .logo-frame__img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .vehicle-circle {
+    margin: 0;
+    width: min(100%, 15rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 8px solid #fff;
+    box-shadow: var(--shadow-lift);
+  }
+
+  .vehicle-circle__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .course-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .course-card {
+    display: grid;
+    gap: 1rem;
+    padding: 2rem 1.6rem 1.75rem;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    border-top: 4px solid var(--color-green);
+  }
+
+  .course-card__subtitle {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-green);
+  }
+
+  .course-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .course-card__desc {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .course-card__list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--color-charcoal-soft);
+  }
+
+  .course-card__list li + li {
+    margin-top: 0.4rem;
+  }
+
+  .reinforcement {
+    margin-top: 1.5rem;
+    padding: 1.6rem 1.75rem;
+    display: grid;
+    gap: 1rem;
+    background: var(--color-pale-green);
+    border-radius: var(--radius-lg);
+  }
+
+  .reinforcement__title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+
+  .reinforcement p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .courses__helper {
+    margin: 1.1rem 0 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .trust {
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: 0.95rem;
+  }
+
+  .schedules {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .schedule-block {
+    padding: 1.5rem 1.5rem;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    border-left: 4px solid var(--color-blue);
+  }
+
+  .schedule-block h3 {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+  }
+
+  .schedule-block p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .schedule-block p + p {
+    margin-top: 0.35rem;
+  }
+
+  .availability {
+    margin: 1.1rem 0 0;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 700px) {
+    .course-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .trust {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .schedules {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .reinforcement {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .trust {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

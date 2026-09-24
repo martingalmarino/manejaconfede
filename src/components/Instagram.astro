@@ -1,0 +1,151 @@
+---
+import { instagramSection } from '../data/content';
+import { instagramPosts, social } from '../data/social';
+
+const validPosts = instagramPosts.filter(
+  (post) => post.id && post.permalink && post.image && post.alt && post.title,
+);
+const hasPosts = validPosts.length > 0;
+---
+
+<section class="ig section" id="instagram" aria-labelledby="ig-title">
+  <div class="container">
+    <div class="ig__intro">
+      <p class="eyebrow">Instagram</p>
+      <h2 id="ig-title" class="section-title section-title--center">{instagramSection.title}</h2>
+      <p class="section-lead section-lead--center">{instagramSection.intro}</p>
+    </div>
+
+    {
+      hasPosts ? (
+        <>
+          <p class="ig__label">{instagramSection.curatedLabel}</p>
+          <ul class="ig__grid">
+            {validPosts.slice(0, 6).map((post) => (
+              <li>
+                <a
+                  class="ig__card"
+                  href={post.permalink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track="instagram_click"
+                  data-section="instagram"
+                >
+                  <img src={post.image} alt={post.alt} loading="lazy" width="400" height="500" />
+                  <span class="ig__card-title">{post.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div class="ig__fallback">
+          <div class="ig__badge" aria-hidden="true">IG</div>
+          <p class="ig__handle">{social.fedeInstagramHandle}</p>
+          <p>
+            Seguime en Instagram para ver consejos, explicaciones y situaciones al volante.
+          </p>
+          <a
+            class="btn btn--primary"
+            href={social.fedeInstagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="instagram_click"
+            data-section="instagram"
+          >
+            {instagramSection.fallbackCta}
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ig__intro {
+    margin-bottom: 2.25rem;
+  }
+
+  .ig__label {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-green);
+  }
+
+  .ig__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ig__card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .ig__card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .ig__card-title {
+    display: block;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 650;
+  }
+
+  .ig__fallback {
+    margin-inline: auto;
+    max-width: 34rem;
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+    background: var(--color-bg-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .ig__badge {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-green), var(--color-blue));
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+
+  .ig__handle {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 750;
+    color: var(--color-charcoal);
+  }
+
+  .ig__fallback p {
+    margin: 0 0 1.35rem;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 900px) {
+    .ig__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

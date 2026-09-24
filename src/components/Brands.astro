@@ -1,0 +1,367 @@
+---
+import {
+  brands,
+  commercialMetrics,
+  portfolioExamples,
+} from '../data/content';
+import { contacts, isValidEmail } from '../data/contacts';
+import { social } from '../data/social';
+
+const hasEmail = isValidEmail(contacts.commercialEmail);
+const hasMetrics = commercialMetrics.length > 0;
+const hasPortfolio = portfolioExamples.length > 0;
+---
+
+<section class="brands section" id="marcas" aria-labelledby="marcas-title">
+  <div class="container">
+    <div class="brands__intro">
+      <p class="eyebrow brands__eyebrow">{brands.eyebrow}</p>
+      <h2 id="marcas-title" class="section-title brands__title">{brands.title}</h2>
+      <p class="brands__body">{brands.body}</p>
+    </div>
+
+    <ul class="formats">
+      {
+        brands.formats.map((format) => (
+          <li>
+            <h3>{format.title}</h3>
+            <p>{format.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      hasMetrics && (
+        <div class="metrics">
+          <h3 class="visually-hidden">Métricas verificadas</h3>
+          <ul>
+            {commercialMetrics.map((metric) => (
+              <li>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+                <small>Actualizado {metric.updatedAt}</small>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      hasPortfolio && (
+        <div class="portfolio">
+          <h3>Ejemplos de colaboración</h3>
+          <ul>
+            {portfolioExamples.map((item) => (
+              <li>
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.title}
+                  </a>
+                ) : (
+                  <strong>{item.title}</strong>
+                )}
+                <p>{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      contacts.mediaKitUrl && (
+        <p class="media-kit">
+          <a href={contacts.mediaKitUrl} target="_blank" rel="noopener noreferrer">
+            Descargar media kit
+          </a>
+        </p>
+      )
+    }
+
+    {
+      hasEmail && contacts.commercialEmail ? (
+        <div class="composer">
+          <h3>Prepará tu propuesta</h3>
+          <p class="composer__hint">
+            Se abrirá tu aplicación de correo para que puedas enviar la propuesta.
+          </p>
+          <form class="composer__form" data-brief-form data-email={contacts.commercialEmail}>
+            <label>
+              Nombre
+              <input name="nombre" type="text" required autocomplete="name" />
+            </label>
+            <label>
+              Marca o empresa
+              <input name="marca" type="text" required autocomplete="organization" />
+            </label>
+            <label>
+              Email
+              <input name="email" type="email" required autocomplete="email" />
+            </label>
+            <label>
+              Tipo de propuesta
+              <select name="tipo" required>
+                <option value="">Elegí una opción</option>
+                {brands.proposalTypes.map((type) => (
+                  <option value={type}>{type}</option>
+                ))}
+              </select>
+            </label>
+            <label class="composer__full">
+              Mensaje
+              <textarea name="mensaje" rows="4" required></textarea>
+            </label>
+            <label>
+              Presupuesto estimado (opcional)
+              <input name="presupuesto" type="text" />
+            </label>
+            <div class="composer__actions">
+              <button class="btn btn--on-dark" type="submit" data-track="collaboration_cta">
+                Preparar propuesta por email
+              </button>
+              <button class="btn btn--on-dark-secondary" type="button" data-copy-email>
+                Copiar email
+              </button>
+            </div>
+            <p class="composer__status" data-form-status role="status" aria-live="polite"></p>
+          </form>
+          <p class="composer__email">
+            Email comercial:{' '}
+            <a href={`mailto:${contacts.commercialEmail}`}>{contacts.commercialEmail}</a>
+          </p>
+        </div>
+      ) : (
+        <div class="brands__fallback">
+          <a
+            class="btn btn--on-dark"
+            href={social.fedeInstagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="collaboration_cta"
+            data-section="marcas"
+          >
+            Hablemos por Instagram
+          </a>
+          <p>
+            Escribime a {social.fedeInstagramHandle} para contar tu propuesta de colaboración.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .brands {
+    background:
+      radial-gradient(900px 420px at 10% 0%, rgba(16, 118, 77, 0.35), transparent 55%),
+      radial-gradient(700px 380px at 100% 20%, rgba(48, 62, 112, 0.45), transparent 50%),
+      #1a1e24;
+    color: #f4f5f2;
+  }
+
+  .brands__eyebrow {
+    color: #8fd6b4;
+  }
+
+  .brands__title {
+    color: #fff;
+  }
+
+  .brands__title::after {
+    background: linear-gradient(90deg, #8fd6b4, #7f91d8);
+  }
+
+  .brands__body {
+    margin: 0;
+    max-width: 42rem;
+    color: rgba(244, 245, 242, 0.82);
+    font-size: 1.1rem;
+  }
+
+  .formats {
+    list-style: none;
+    margin: 2.75rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .formats li {
+    padding: 1.4rem 1.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  .formats h3 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .formats p {
+    margin: 0;
+    color: rgba(244, 245, 242, 0.75);
+  }
+
+  .brands__fallback {
+    margin-top: 2.5rem;
+  }
+
+  .brands__fallback p {
+    margin: 1rem 0 0;
+    color: rgba(244, 245, 242, 0.75);
+  }
+
+  .composer {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-lg);
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .composer h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    color: #fff;
+  }
+
+  .composer__hint,
+  .composer__email {
+    color: rgba(244, 245, 242, 0.75);
+  }
+
+  .composer__form {
+    display: grid;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .composer__form label {
+    display: grid;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 550;
+  }
+
+  .composer__form input,
+  .composer__form select,
+  .composer__form textarea {
+    width: 100%;
+    min-height: var(--tap-min);
+    padding: 0.65rem 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--color-charcoal);
+  }
+
+  .composer__form textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  .composer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .composer__status {
+    min-height: 1.25rem;
+    margin: 0;
+    color: #8fd6b4;
+  }
+
+  .metrics ul,
+  .portfolio ul {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 700px) {
+    .formats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .composer__form {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .composer__full,
+    .composer__actions,
+    .composer__status {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  import { trackEvent } from '../scripts/analytics';
+
+  const form = document.querySelector('[data-brief-form]');
+  if (form instanceof HTMLFormElement) {
+    const email = form.dataset.email || '';
+    const status = form.querySelector('[data-form-status]');
+    const copyBtn = form.querySelector('[data-copy-email]');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const data = new FormData(form);
+      const nombre = String(data.get('nombre') || '').trim();
+      const marca = String(data.get('marca') || '').trim();
+      const fromEmail = String(data.get('email') || '').trim();
+      const tipo = String(data.get('tipo') || '').trim();
+      const mensaje = String(data.get('mensaje') || '').trim();
+      const presupuesto = String(data.get('presupuesto') || '').trim();
+
+      const subject = encodeURIComponent(`Propuesta comercial — ${marca}`);
+      const body = encodeURIComponent(
+        [
+          `Nombre: ${nombre}`,
+          `Marca o empresa: ${marca}`,
+          `Email: ${fromEmail}`,
+          `Tipo de propuesta: ${tipo}`,
+          presupuesto ? `Presupuesto estimado: ${presupuesto}` : null,
+          '',
+          'Mensaje:',
+          mensaje,
+        ]
+          .filter((line) => line !== null)
+          .join('\n'),
+      );
+
+      trackEvent('collaboration_cta', {
+        section: 'marcas',
+        label: 'mailto',
+      });
+
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      if (status) {
+        status.textContent =
+          'Se abrirá tu aplicación de correo para que puedas enviar la propuesta.';
+      }
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+        if (status) status.textContent = `Email copiado: ${email}`;
+      } catch {
+        if (status) status.textContent = `Email comercial: ${email}`;
+      }
+    });
+  }
+</script>

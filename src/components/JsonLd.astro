@@ -1,0 +1,64 @@
+---
+import { site, getSiteUrl } from '../data/site';
+import { social } from '../data/social';
+
+const siteUrl = getSiteUrl();
+
+const person = {
+  '@type': 'Person',
+  '@id': siteUrl ? `${siteUrl}/#person` : '#person',
+  name: 'Fede',
+  alternateName: site.name,
+  jobTitle: 'Instructor de manejo y creador de contenido',
+  description:
+    'Instructor de manejo, creador de contenido y dueño de Praga Escuela de Conductores en Córdoba, Argentina.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Córdoba',
+    addressCountry: 'AR',
+  },
+  sameAs: [social.fedeInstagram, social.youtube],
+  worksFor: {
+    '@id': siteUrl ? `${siteUrl}/#organization` : '#organization',
+  },
+};
+
+const organization = {
+  '@type': 'Organization',
+  '@id': siteUrl ? `${siteUrl}/#organization` : '#organization',
+  name: 'Praga Escuela de Conductores',
+  alternateName: 'Praga',
+  description:
+    'Escuela de conductores en Córdoba, Argentina. Cursos de manejo que combinan práctica y educación vial.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Córdoba',
+    addressCountry: 'AR',
+  },
+  sameAs: [social.pragaInstagram],
+  owner: {
+    '@id': siteUrl ? `${siteUrl}/#person` : '#person',
+  },
+};
+
+const webpage = {
+  '@type': 'WebPage',
+  '@id': siteUrl ? `${siteUrl}/#webpage` : '#webpage',
+  name: site.title,
+  description: site.description,
+  inLanguage: site.language,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: site.name,
+    ...(siteUrl ? { url: siteUrl } : {}),
+  },
+  about: [{ '@id': person['@id'] }, { '@id': organization['@id'] }],
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [person, organization, webpage],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

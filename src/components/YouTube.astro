@@ -1,0 +1,104 @@
+---
+import { youtubeSection } from '../data/content';
+import { social, youtubeVideos } from '../data/social';
+import VideoFacade from './VideoFacade.astro';
+
+const featured = youtubeVideos.featured;
+const secondary = youtubeVideos.secondary.filter((v) => v.videoId && v.title);
+const hasVideos = Boolean(featured?.videoId && featured.title) || secondary.length > 0;
+---
+
+<section class="yt section section--soft" id="youtube" aria-labelledby="yt-title">
+  <div class="container">
+    <div class="yt__intro">
+      <p class="eyebrow">YouTube</p>
+      <h2 id="yt-title" class="section-title section-title--center">{youtubeSection.title}</h2>
+      <p class="section-lead section-lead--center">{youtubeSection.intro}</p>
+    </div>
+
+    {
+      hasVideos && featured?.videoId && featured.title ? (
+        <div class="yt__featured">
+          <VideoFacade
+            videoId={featured.videoId}
+            title={featured.title}
+            description={featured.description}
+            featured
+          />
+        </div>
+      ) : null
+    }
+
+    {
+      secondary.length > 0 ? (
+        <div class="yt__secondary">
+          {secondary.slice(0, 3).map((video) => (
+            <VideoFacade videoId={video.videoId} title={video.title} description={video.description} />
+          ))}
+        </div>
+      ) : null
+    }
+
+    <div class={`yt__channel ${hasVideos ? '' : 'yt__channel--solo'}`}>
+      {
+        !hasVideos && (
+          <p>
+            Encontrá tutoriales y explicaciones en el canal{' '}
+            <strong>{social.youtubeHandle}</strong>.
+          </p>
+        )
+      }
+      <a
+        class="btn btn--primary"
+        href={social.youtube}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track="youtube_channel_click"
+        data-section="youtube"
+      >
+        {youtubeSection.channelCta}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .yt__intro {
+    margin-bottom: 2.25rem;
+  }
+
+  .yt__featured {
+    margin-top: 0.5rem;
+  }
+
+  .yt__secondary {
+    margin-top: 1.35rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .yt__channel {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .yt__channel--solo {
+    margin-inline: auto;
+    max-width: 34rem;
+    padding: 2.5rem 1.75rem;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .yt__channel p {
+    margin: 0 0 1.35rem;
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 800px) {
+    .yt__secondary {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

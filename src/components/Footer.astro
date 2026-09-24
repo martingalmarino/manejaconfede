@@ -1,0 +1,208 @@
+---
+import { site } from '../data/site';
+import { social } from '../data/social';
+import {
+  contacts,
+  isValidWhatsApp,
+  isValidEmail,
+  buildWhatsAppUrl,
+  courseInquiryMessage,
+} from '../data/contacts';
+
+const year = new Date().getFullYear();
+const whatsappReady = isValidWhatsApp(contacts.whatsappNumber);
+const hasEmail = isValidEmail(contacts.commercialEmail);
+
+const learnHref = whatsappReady
+  ? buildWhatsAppUrl(contacts.whatsappNumber!, courseInquiryMessage('los cursos'))
+  : social.pragaInstagram;
+
+const learnLabel = whatsappReady
+  ? 'Consultar cursos por WhatsApp'
+  : 'Consultar cursos por Instagram';
+
+const collabHref = hasEmail
+  ? `mailto:${contacts.commercialEmail}`
+  : social.fedeInstagram;
+
+const collabLabel = hasEmail
+  ? 'Escribir propuesta por email'
+  : 'Proponer colaboración por Instagram';
+---
+
+<footer class="footer" id="contacto">
+  <div class="container footer__main">
+    <div class="footer__brand">
+      <p class="footer__wordmark">{site.name}</p>
+      <p class="footer__location">{site.location}</p>
+      <p class="footer__text">
+        Instructor de manejo, creador de contenido y dueño de Praga Escuela de Conductores.
+      </p>
+    </div>
+
+    <div class="footer__routes">
+      <a
+        class="footer__route"
+        href={learnHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track="course_cta"
+        data-section="contacto"
+        data-course-id="general"
+      >
+        <span class="footer__route-label">Quiero aprender a manejar</span>
+        <span class="footer__route-action">{learnLabel}</span>
+      </a>
+      <a
+        class="footer__route"
+        href={collabHref}
+        target={hasEmail ? undefined : '_blank'}
+        rel={hasEmail ? undefined : 'noopener noreferrer'}
+        data-track="collaboration_cta"
+        data-section="contacto"
+      >
+        <span class="footer__route-label">Quiero proponer una colaboración</span>
+        <span class="footer__route-action">{collabLabel}</span>
+      </a>
+    </div>
+
+    <div class="footer__links">
+      <p class="footer__heading">Seguime</p>
+      <ul class="footer__social">
+        <li>
+          <a href={social.fedeInstagram} target="_blank" rel="noopener noreferrer" data-track="instagram_click" data-section="footer">
+            Instagram Fede
+          </a>
+        </li>
+        <li>
+          <a href={social.pragaInstagram} target="_blank" rel="noopener noreferrer" data-track="instagram_click" data-section="footer">
+            Instagram Praga
+          </a>
+        </li>
+        <li>
+          <a href={social.youtube} target="_blank" rel="noopener noreferrer" data-track="youtube_channel_click" data-section="footer">
+            YouTube
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer__bar">
+    <div class="container">
+      <p class="footer__copy">© {year} {site.name}. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #14181e;
+    color: rgba(255, 255, 255, 0.82);
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer__main {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .footer__wordmark {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: #fff;
+  }
+
+  .footer__location,
+  .footer__text {
+    margin: 0.55rem 0 0;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .footer__routes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .footer__route {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.25rem 1.35rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    min-height: var(--tap-min);
+    transition: border-color 160ms ease, background 160ms ease;
+  }
+
+  .footer__route:hover {
+    border-color: var(--color-green);
+    background: rgba(16, 118, 77, 0.12);
+  }
+
+  .footer__route-label {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .footer__route-action {
+    color: #8fd6b4;
+    font-weight: 650;
+  }
+
+  .footer__heading {
+    margin: 0 0 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .footer__social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .footer__social a {
+    color: rgba(255, 255, 255, 0.78);
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .footer__social a:hover {
+    color: #8fd6b4;
+  }
+
+  .footer__bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-block: 1.1rem;
+  }
+
+  .footer__copy {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  @media (min-width: 800px) {
+    .footer__main {
+      grid-template-columns: 1.1fr 1.4fr 0.8fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .footer {
+      padding-bottom: 0;
+    }
+  }
+</style>
